@@ -76,15 +76,15 @@ define sshkeys::create_ssh_key (
       group  => $group_real,
       mode   => '0700',
     }
-    $require = File["${homedir}/.ssh"]
+    $require_real = File["${homedir}/.ssh"]
   } else {
-    $require = undef
+    $require_real = undef
   }
 
   exec { "ssh_keygen-${name}":
     command => "/usr/bin/ssh-keygen -t ${ssh_keytype} -b ${bitlength} -f '${homedir}/.ssh/id_${ssh_keytype}' -N '${passphrase}' -C '${name}@${::fqdn}'",
     user    => $name,
     creates => "${homedir}/.ssh/id_${ssh_keytype}",
-    require => $require,
+    require => $require_real,
   }
 }
